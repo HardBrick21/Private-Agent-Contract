@@ -53,10 +53,6 @@ Manages private agent wallets with encrypted balances.
 | 1 | PRIVATE | Only owner and authorized agents |
 | 2 | CONFIDENTIAL | Only owner |
 
-## Target Track
-
-**Private Agents, Trusted Actions** ($5,750)
-
 ---
 
 *Private Agent Contract - Venice-style privacy for autonomous agents.*
