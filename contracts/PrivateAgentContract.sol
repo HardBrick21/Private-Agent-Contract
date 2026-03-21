@@ -39,7 +39,6 @@ contract PrivateAgentContract is Ownable {
     mapping(address => AgentAccess) public agentAccess;
     mapping(bytes32 => PrivateData) public privateData;
     
-    address public owner;
     uint256 public totalPrivateRecords;
     
     // ============ Events ============
@@ -65,7 +64,7 @@ contract PrivateAgentContract is Ownable {
     // ============ Constructor ============
     
     constructor() Ownable(msg.sender) {
-        owner = msg.sender;
+        // owner is set by Ownable constructor
     }
     
     // ============ Agent Management ============
@@ -233,17 +232,16 @@ contract PrivateAgentContract is Ownable {
     // ============ Owner Functions ============
     
     /**
-     * @notice Set owner (transfer control)
+     * @notice Transfer ownership (Ownable function)
      */
-    function setOwner(address newOwner) external onlyOwner {
-        require(newOwner != address(0), "Invalid address");
-        owner = newOwner;
+    function transferOwner(address newOwner) external onlyOwner {
+        transferOwnership(newOwner);
     }
     
     /**
-     * @notice Get contract owner
+     * @notice Get contract owner (Ownable function)
      */
     function getOwner() external view returns (address) {
-        return owner;
+        return owner();
     }
 }
