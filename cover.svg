@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#0f3460"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f43f5e"/>
+      <stop offset="100%" style="stop-color:#e11d48"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.1">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="white" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="630" stroke="white" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="630" stroke="white" stroke-width="1"/>
+  </g>
+  
+  <!-- Brick emoji -->
+  <text x="100" y="180" font-size="120">🧱</text>
+  
+  <!-- Title -->
+  <text x="100" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">Private Agent Contract</text>
+  
+  <!-- Tagline -->
+  <text x="100" y="340" font-family="Arial, sans-serif" font-size="28" fill="#9ca3af">Venice-Style Private Computation</text>
+  
+  <!-- Privacy features -->
+  <g transform="translate(100, 400)">
+    <!-- Confidential -->
+    <rect x="0" y="0" width="220" height="80" rx="8" fill="#f43f5e"/>
+    <text x="110" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">Confidential</text>
+    <text x="110" y="58" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Encrypted state</text>
+    
+    <!-- Access Control -->
+    <rect x="260" y="0" width="220" height="80" rx="8" fill="#e11d48"/>
+    <text x="370" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">Access Control</text>
+    <text x="370" y="58" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Fine-grained</text>
+    
+    <!-- Private Wallets -->
+    <rect x="520" y="0" width="220" height="80" rx="8" fill="#f43f5e"/>
+    <text x="630" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">Private Wallets</text>
+    <text x="630" y="58" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Encrypted balances</text>
+    
+    <!-- Agent-Native -->
+    <rect x="780" y="0" width="220" height="80" rx="8" fill="#e11d48"/>
+    <text x="890" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">Agent-Native</text>
+    <text x="890" y="58" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Autonomous</text>
+  </g>
+  
+  <!-- Access levels -->
+  <g transform="translate(100, 520)">
+    <text font-family="Arial, sans-serif" font-size="18" fill="#9ca3af">
+      <tspan fill="#22c55e">PUBLIC</tspan>
+      <tspan fill="#6b7280"> • </tspan>
+      <tspan fill="#f59e0b">PRIVATE</tspan>
+      <tspan fill="#6b7280"> • </tspan>
+      <tspan fill="#f43f5e">CONFIDENTIAL</tspan>
+    </text>
+  </g>
+</svg>
