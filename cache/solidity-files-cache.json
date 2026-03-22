@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/root/.openclaw/workspace/synthesis/private-agent-contract/contracts/PrivateAgentContract.sol": {
-      "lastModificationDate": 1774066125769,
-      "contentHash": "9d137dfa7f0c6f5f19fbd4b487f0a6e5",
+      "lastModificationDate": 1774179448585,
+      "contentHash": "e1e4ff9d6caa5bbc84dc50f5383be7f7",
       "sourceName": "contracts/PrivateAgentContract.sol",
       "solcConfig": {
         "version": "0.8.20",

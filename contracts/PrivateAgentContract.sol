@@ -232,16 +232,71 @@ contract PrivateAgentContract is Ownable {
     // ============ Owner Functions ============
     
     /**
-     * @notice Transfer ownership (Ownable function)
-     */
-    function transferOwner(address newOwner) external onlyOwner {
-        transferOwnership(newOwner);
-    }
-    
-    /**
      * @notice Get contract owner (Ownable function)
      */
     function getOwner() external view returns (address) {
         return owner();
+    }
+    
+    // ============ Agent Management Extensions ============
+    
+    /**
+     * @notice Extend agent access duration
+     */
+    function extendAgentAccess(address agent, uint256 additionalDuration) external onlyOwner {
+        AgentAccess storage access = agentAccess[agent];
+        require(access.isActive, "Agent not authorized");
+        
+        access.expiresAt = access.expiresAt + additionalDuration;
+    }
+    
+    /**
+     * @notice Update agent access level
+     */
+    function updateAgentLevel(address agent, AccessLevel newLevel) external onlyOwner {
+        AgentAccess storage access = agentAccess[agent];
+        require(access.isActive, "Agent not authorized");
+        require(newLevel != AccessLevel.PUBLIC, "Use public contract for PUBLIC level");
+        
+        access.level = newLevel;
+        emit AgentAuthorized(agent, newLevel, access.expiresAt);
+    }
+    
+    /**
+     * @notice Get all authorized agents
+     */
+    function getAuthorizedAgents() external view returns (address[] memory agents, AccessLevel[] memory levels) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < 100; i++) {
+            // This is a simplified approach - in production would use a registry
+            address agent = msg.sender; // Placeholder
+            if (agentAccess[agent].isActive) {
+                count++;
+            }
+        }
+        
+        agents = new address[](count);
+        levels = new AccessLevel[](count);
+        
+        uint256 index = 0;
+        for (uint256 i = 0; i < 100 && index < count; i++) {
+            address agent = msg.sender; // Placeholder
+            if (agentAccess[agent].isActive) {
+                agents[index] = agent;
+                levels[index] = agentAccess[agent].level;
+                index++;
+            }
+        }
+    }
+    
+    /**
+     * @notice Check if agent access is expired
+     */
+    function isAccessExpired(address agent) external view returns (bool) {
+        AgentAccess storage access = agentAccess[agent];
+        if (!access.isActive || access.expiresAt == 0) {
+            return false;
+        }
+        return block.timestamp >= access.expiresAt;
     }
 }
