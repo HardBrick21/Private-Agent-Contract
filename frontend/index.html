@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Agent Contract - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-2">🧱 Private Agent Contract</h1>
+            <p class="text-gray-400">Venice-Style Private Computation</p>
+            <div class="mt-4 flex justify-center gap-4">
+                <span class="px-3 py-1 rounded-full text-sm bg-red-500/20 text-red-400">Base Mainnet</span>
+            </div>
+        </header>
+
+        <div id="connectionStatus" class="card rounded-xl p-4 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="statusDot" class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span id="statusText" class="text-gray-300">Not Connected</span>
+                </div>
+                <button id="connectBtn" onclick="connectWallet()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition">Connect Wallet</button>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-4">🔐 Authorize Agent</h2>
+                <div class="space-y-4">
+                    <input type="text" id="agentAddress" placeholder="Agent Address (0x...)" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <select id="accessLevel" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                        <option value="1">PRIVATE</option>
+                        <option value="2">CONFIDENTIAL</option>
+                    </select>
+                    <input type="number" id="duration" value="86400" placeholder="Duration (seconds)" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <button onclick="authorizeAgent()" class="w-full py-2 bg-red-600 hover:bg-red-700 rounded-lg">Authorize</button>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-4">📝 Store Private Data</h2>
+                <div class="space-y-4">
+                    <input type="text" id="dataId" placeholder="Data ID" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <input type="text" id="encryptedHash" placeholder="Encrypted Hash" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <input type="text" id="encryptionKey" placeholder="Encryption Key Hash" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <button onclick="storePrivateData()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">Store</button>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-4">🔍 Access Private Data</h2>
+                <div class="space-y-4">
+                    <input type="text" id="accessDataId" placeholder="Data ID" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <select id="requestedLevel" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                        <option value="0">PUBLIC</option>
+                        <option value="1">PRIVATE</option>
+                        <option value="2">CONFIDENTIAL</option>
+                    </select>
+                    <button onclick="accessPrivateData()" class="w-full py-2 bg-purple-600 hover:bg-purple-700 rounded-lg">Access</button>
+                    <div id="accessResult" class="hidden bg-white/5 rounded-lg p-4"></div>
+                </div>
+            </div>
+
+            <div class="card rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-4">⚠️ Revoke Agent</h2>
+                <div class="space-y-4">
+                    <input type="text" id="revokeAgentAddress" placeholder="Agent Address" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2">
+                    <button onclick="revokeAgent()" class="w-full py-2 bg-red-600 hover:bg-red-700 rounded-lg">Revoke</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card rounded-xl p-6 mt-8">
+            <h2 class="text-xl font-semibold mb-4">📜 Transaction Log</h2>
+            <div id="txLog" class="space-y-2 max-h-64 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        const CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000'; // Replace with deployed address
+        const CONTRACT_ABI = [
+            "function authorizeAgent(address agent, uint8 level, uint256 duration) external",
+            "function storePrivateData(bytes32 dataId, bytes32 encryptedHash, bytes32 encryptionKeyHash) external",
+            "function accessPrivateData(bytes32 dataId, uint8 requestedLevel) external returns (bool granted, bytes32 encryptedHash)",
+            "function revokeAgent(address agent) external"
+        ];
+
+        let provider, signer, contract;
+
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask!');
+                return;
+            }
+            try {
+                provider = new ethers.BrowserProvider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                signer = await provider.getSigner();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                const address = await signer.getAddress();
+                document.getElementById('statusDot').className = 'w-3 h-3 rounded-full bg-green-500 pulse';
+                document.getElementById('statusText').textContent = `Connected: ${address.slice(0,6)}...${address.slice(-4)}`;
+                document.getElementById('connectBtn').textContent = 'Connected';
+                document.getElementById('connectBtn').disabled = true;
+                log('Connected to wallet: ' + address);
+            } catch (err) {
+                alert('Connection failed: ' + err.message);
+            }
+        }
+
+        async function authorizeAgent() {
+            if (!contract) return alert('Connect wallet first!');
+            const agent = document.getElementById('agentAddress').value;
+            const level = parseInt(document.getElementById('accessLevel').value);
+            const duration = parseInt(document.getElementById('duration').value);
+            if (!agent) return alert('Enter agent address!');
+            try {
+                const tx = await contract.authorizeAgent(agent, level, duration);
+                log(`Authorizing ${agent} with level ${level}...`);
+                await tx.wait();
+                log(`✅ Agent authorized!`);
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+
+        async function storePrivateData() {
+            if (!contract) return alert('Connect wallet first!');
+            const dataId = document.getElementById('dataId').value;
+            const encryptedHash = document.getElementById('encryptedHash').value;
+            const encryptionKey = document.getElementById('encryptionKey').value;
+            if (!dataId || !encryptedHash) return alert('Fill required fields!');
+            try {
+                const tx = await contract.storePrivateData(dataId, encryptedHash, encryptionKey);
+                log(`Storing private data ${dataId}...`);
+                await tx.wait();
+                log(`✅ Data stored!`);
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+
+        async function accessPrivateData() {
+            if (!contract) return alert('Connect wallet first!');
+            const dataId = document.getElementById('accessDataId').value;
+            const level = parseInt(document.getElementById('requestedLevel').value);
+            if (!dataId) return alert('Enter data ID!');
+            try {
+                const result = await contract.accessPrivateData(dataId, level);
+                const resultDiv = document.getElementById('accessResult');
+                resultDiv.classList.remove('hidden');
+                resultDiv.innerHTML = `
+                    <div class="flex justify-between"><span>Access Granted:</span><span>${result.granted ? '✅' : '❌'}</span></div>
+                    <div class="flex justify-between"><span>Encrypted Hash:</span><span>${result.encryptedHash}</span></div>
+                `;
+                log(`Accessed data ${dataId}: ${result.granted ? 'Granted' : 'Denied'}`);
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+
+        async function revokeAgent() {
+            if (!contract) return alert('Connect wallet first!');
+            const agent = document.getElementById('revokeAgentAddress').value;
+            if (!agent) return alert('Enter agent address!');
+            try {
+                const tx = await contract.revokeAgent(agent);
+                log(`Revoking agent ${agent}...`);
+                await tx.wait();
+                log(`✅ Agent revoked!`);
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+
+        function log(msg) {
+            const logEl = document.getElementById('txLog');
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML = `<div class="text-sm"><span class="text-gray-500">[${time}]</span> ${msg}</div>` + logEl.innerHTML;
+        }
+    </script>
+</body>
+</html>
