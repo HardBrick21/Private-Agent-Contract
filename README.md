@@ -1,6 +1,19 @@
 # Private Agent Contract
 
-> Venice-style private smart contracts for AI agents with confidential state
+[![Synthesis Submission](https://img.shields.io/badge/Synthesis-Submit-blue?logo=gitbook)](https://synthesis.devfolio.co/projects/private-agent-contract-xxx)
+
+Venice-style private smart contracts for AI agents with confidential state
+
+## 🏆 Synthesis Hackathon Submission
+
+- **Tracks**: Private Agents, Trusted Actions
+- **Status**: ✅ Published
+- **Demo**: https://hardbrick21.github.io/Private-Agent-Contract/
+- **GitHub**: https://github.com/HardBrick21/Private-Agent-Contract
+
+## 📋 Cover Image
+
+![Private Agent Contract Cover](https://raw.githubusercontent.com/HardBrick21/Private-Agent-Contract/main/cover.svg)
 
 ## Overview
 
@@ -29,50 +42,70 @@ Manages agent access and private data storage.
 **Functions:**
 - `authorizeAgent(agent, level, duration)` - Authorize agent with access level
 - `revokeAgent(agent)` - Revoke agent access
-- `storePrivateData(dataId, encryptedHash, encryptionKeyHash)` - Store encrypted data
-- `accessPrivateData(dataId, requestedLevel)` - Access private data
-- `updatePrivateData(dataId, newEncryptedHash, newEncryptionKeyHash)` - Update data
-- `deletePrivateData(dataId)` - Delete data (CONFIDENTIAL only)
+- `setPrivateData(key, value)` - Set private data
+- `getPrivateData(key)` - Get private data
 
-### PrivateAgentWallet
+## Contract Addresses
 
-Manages private agent wallets with encrypted balances.
+| Contract | Address | Network |
+|----------|---------|---------|
+| PrivateAgentContract | TBD | Base Sepolia |
 
-**Functions:**
-- `createWallet()` - Create private wallet
-- `deposit(amount)` - Deposit funds
-- `createPrivateTransfer(to, amount, encryptionKey)` - Create transfer
-- `executePrivateTransfer(transferId)` - Execute transfer
-- `getBalance(agent)` - Get encrypted balance
+## Quick Start
 
-## Access Levels
+### Installation
 
-| Level | Name | Description |
-|-------|------|-------------|
-| 0 | PUBLIC | Everyone can read/write |
-| 1 | PRIVATE | Only owner and authorized agents |
-| 2 | CONFIDENTIAL | Only owner |
+```bash
+npm install
+```
 
-## 🌐 Live Demo
+### Compile
 
-**GitHub Pages**: [https://hardbrick21.github.io/Private-Agent-Contract/](https://hardbrick21.github.io/Private-Agent-Contract/)
+```bash
+npx hardhat compile
+```
 
-### Demo Features
+### Test
 
-The live demo allows you to:
-- 🔗 **Connect Wallet** - Connect your MetaMask wallet
-- 🔐 **Authorize Agent** - Authorize agents with access levels (PRIVATE, CONFIDENTIAL)
-- 📝 **Store Private Data** - Store encrypted private data
-- 🔍 **Access Private Data** - Access private data with authorization check
-- ⚠️ **Revoke Agent** - Revoke agent access
+```bash
+npx hardhat test
+```
 
-### How to Use the Demo
+### Deploy
 
-1. Open the [demo page](https://hardbrick21.github.io/Private-Agent-Contract/)
-2. Click "Connect Wallet" and approve the connection
-3. Use the forms to interact with the smart contract
-4. View transaction logs in real-time
+```bash
+npx hardhat run scripts/deploy.js --network <network>
+```
+
+## 🛠️ Tech Stack
+
+- Solidity
+- Hardhat
+- OpenZeppelin
+- Venice (private computation)
+
+## 📁 Project Structure
+
+- `contracts/` - Smart contracts
+- `frontend/` - Frontend application
+- `scripts/` - Deployment scripts
+- `test/` - Test files
+
+## 📖 Documentation
+
+- [AGENTS.md](./AGENTS.md) - Agent documentation
+
+## 🤝 Team
+
+- **AI Agent**: Brick Private
+- **Human**: hardbrick
+
+## 📅 Timeline
+
+- Started: March 19, 2026
+- Submitted: March 22, 2026
+- Published: March 22, 2026
 
 ---
 
-*Private Agent Contract - Venice-style privacy for autonomous agents.*
+*Built with OpenClaw Agent Platform*
