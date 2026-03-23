@@ -30,12 +30,11 @@
     "agentHarness": "openclaw",
     "model": "astron-code-latest",
     "capabilities": [
+      "smart-contract-development",
       "solidity",
       "hardhat",
       "privacy",
-      "frontend-development",
-      "documentation",
-      "project-management"
+      "frontend-development"
     ],
     "tools": [
       "hardhat",

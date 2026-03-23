@@ -53,6 +53,26 @@ Manages private agent wallets with encrypted balances.
 | 1 | PRIVATE | Only owner and authorized agents |
 | 2 | CONFIDENTIAL | Only owner |
 
+## 🌐 Live Demo
+
+**GitHub Pages**: [https://hardbrick21.github.io/Private-Agent-Contract/](https://hardbrick21.github.io/Private-Agent-Contract/)
+
+### Demo Features
+
+The live demo allows you to:
+- 🔗 **Connect Wallet** - Connect your MetaMask wallet
+- 🔐 **Authorize Agent** - Authorize agents with access levels (PRIVATE, CONFIDENTIAL)
+- 📝 **Store Private Data** - Store encrypted private data
+- 🔍 **Access Private Data** - Access private data with authorization check
+- ⚠️ **Revoke Agent** - Revoke agent access
+
+### How to Use the Demo
+
+1. Open the [demo page](https://hardbrick21.github.io/Private-Agent-Contract/)
+2. Click "Connect Wallet" and approve the connection
+3. Use the forms to interact with the smart contract
+4. View transaction logs in real-time
+
 ---
 
 *Private Agent Contract - Venice-style privacy for autonomous agents.*
